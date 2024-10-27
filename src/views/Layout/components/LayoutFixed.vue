@@ -1,8 +1,12 @@
 <script setup lang="ts">
-// vueUse useScroll: 获取当前页面滚动了多少
-import { useScroll } from '@vueuse/core'
-// 纵向滚动的距离
-const { y } = useScroll(window)
+    import { useCategoryStore } from '@/stores/categoryStore';
+    // vueUse useScroll: 获取当前页面滚动了多少
+    import { useScroll } from '@vueuse/core'
+
+    // 使用pinia获取导航栏列表
+    const categoryStore = useCategoryStore()
+    // 纵向滚动的距离
+    const { y } = useScroll(window)
 
 </script>
 
@@ -15,24 +19,10 @@ const { y } = useScroll(window)
                 <li class="home">
                     <RouterLink to="/">首页</RouterLink>
                 </li>
-                <li class="home">
-                    <RouterLink to="/">居家</RouterLink>
+                <li class="home" v-for="item in categoryStore.categoryList" :key="item.id">
+                    <RouterLink to="/">{{item.name}}</RouterLink>
                 </li>
-                <li class="home">
-                    <RouterLink to="/">美食</RouterLink>
-                </li>
-                <li class="home">
-                    <RouterLink to="/">服饰</RouterLink>
-                </li>
-                <li class="home">
-                    <RouterLink to="/">母婴</RouterLink>
-                </li>
-                <li class="home">
-                    <RouterLink to="/">个护</RouterLink>
-                </li>
-                <li class="home">
-                    <RouterLink to="/">严选</RouterLink>
-                </li>
+                
             </ul>
             <!-- <LayoutHeaderUl /> -->
             <div class="right">
