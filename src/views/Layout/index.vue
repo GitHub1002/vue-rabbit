@@ -20,7 +20,6 @@
         <LayoutFixed></LayoutFixed>
         <LayoutNav></LayoutNav>
         <LayoutHeader></LayoutHeader>
-        我是Layout组件
         <router-view></router-view>
         <LayoutFooter></LayoutFooter>
     </div>
