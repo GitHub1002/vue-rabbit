@@ -6,7 +6,6 @@
 
     const getBanner = async () =>{
         const result = await getBannerAPI();
-        console.log(result);
         bannerList.value = result.data.result;
     }
 
