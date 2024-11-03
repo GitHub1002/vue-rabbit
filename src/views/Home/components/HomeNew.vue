@@ -9,9 +9,7 @@
         newList.value = res.data.result;
     };
 
-    onMounted(() => {
-        getHomeNewList();
-    });
+    onMounted(() => getHomeNewList())
 </script>
 
 <template>
