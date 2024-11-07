@@ -1,17 +1,29 @@
 <script setup lang="ts" name="Category">
     import { getCategoryAPI } from '@/apis/category';
+    import { getBannerAPI } from '@/apis/home';
     import { onMounted, ref } from 'vue';
     import { useRoute } from 'vue-router';
 
-    const categoryData = ref({})
     const route = useRoute()
+    // 保存面包屑数据
+    const categoryData = ref({})
+    // 保存轮播图数据
+    const bannerList = ref([])
+
+    // 面包屑数据
     const getCategory = async () => {
         const res = await getCategoryAPI(route.params.id);
-        console.log(res);
         categoryData.value = res.data.result;
-        console.log(categoryData.value);
+    }
+    // 轮播图数据
+    const getBanner = async () =>{
+        const res = await getBannerAPI({
+            distributionSite : '2'
+        });
+        bannerList.value = res.data.result;
     }
     onMounted(() => getCategory())
+    onMounted(() => getBanner())
 
 </script>
 
@@ -24,6 +36,14 @@
                     <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
                     <el-breadcrumb-item>{{ categoryData.name }}</el-breadcrumb-item>
                 </el-breadcrumb>
+            </div>
+            <!-- 轮播图 -->
+            <div class="home-banner">
+                <el-carousel height="500px">
+                    <el-carousel-item v-for="item in bannerList" :key="item.id">
+                        <img :src="item.imgUrl" alt="">
+                    </el-carousel-item>
+                </el-carousel>
             </div>
         </div>
     </div>

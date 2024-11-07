@@ -20,7 +20,7 @@
         <LayoutFixed></LayoutFixed>
         <LayoutNav></LayoutNav>
         <LayoutHeader></LayoutHeader>
-        <router-view></router-view>
+        <RouterView />
         <LayoutFooter></LayoutFooter>
     </div>
 </template>
