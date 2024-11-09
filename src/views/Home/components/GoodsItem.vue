@@ -10,12 +10,12 @@
 <template>
     <ul class="goods-list">
         <li v-for="good in goods" :key="good.id">
-        <RouterLink to="/" class="goods-item">
-            <img v-img-lazy="good.picture" alt="">
-            <p class="name ellipsis">{{ good.name }}</p>
-            <p class="desc ellipsis">{{ good.desc }}</p>
-            <p class="price">&yen;{{ good.price }}</p>
-        </RouterLink>
+            <RouterLink to="/" class="goods-item">
+                <img v-img-lazy="good.picture" alt="未显示成功">
+                <p class="name ellipsis">{{ good.name }}</p>
+                <p class="desc ellipsis">{{ good.desc }}</p>
+                <p class="price">&yen;{{ good.price }}</p>
+            </RouterLink>
         </li>
     </ul>
 </template>

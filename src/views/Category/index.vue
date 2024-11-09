@@ -2,19 +2,27 @@
     import { getCategoryAPI } from '@/apis/category';
     import { getBannerAPI } from '@/apis/home';
     import { onMounted, ref } from 'vue';
-    import { useRoute } from 'vue-router';
+    import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+    import GoodsItem from '@/views/Home/components/GoodsItem.vue';
 
     const route = useRoute()
+
     // 保存面包屑数据
     const categoryData = ref({})
+    // 面包屑数据
+    const getCategory = async (id = route.params.id) => {
+        const res = await getCategoryAPI(id);
+        categoryData.value = res.data.result;
+        console.log(categoryData.value)
+    }
+    onMounted(() => getCategory())
+    // 路由参数变化时，可以把分类数据接口重新发送
+    onBeforeRouteUpdate((to) => {
+        getCategory(to.params.id)
+    })
+
     // 保存轮播图数据
     const bannerList = ref([])
-
-    // 面包屑数据
-    const getCategory = async () => {
-        const res = await getCategoryAPI(route.params.id);
-        categoryData.value = res.data.result;
-    }
     // 轮播图数据
     const getBanner = async () =>{
         const res = await getBannerAPI({
@@ -22,7 +30,6 @@
         });
         bannerList.value = res.data.result;
     }
-    onMounted(() => getCategory())
     onMounted(() => getBanner())
 
 </script>
@@ -44,6 +51,28 @@
                         <img :src="item.imgUrl" alt="">
                     </el-carousel-item>
                 </el-carousel>
+            </div>
+            <!-- 分类商品 -->
+            <div class="sub-list">
+                <h3>全部分类</h3>
+                <ul>
+                    <li v-for="i in categoryData.children" :key="i.id">
+                        <!-- 配置路由关系 -->
+                        <RouterLink to="/">
+                            <img :src="i.picture" />
+                            <p>{{ i.name }}</p>
+                        </RouterLink>
+                    </li>
+                </ul>
+            </div>
+            <!-- 每类商品推荐商品 -->
+            <div class="ref-goods" v-for="item in categoryData.children" :key="item.id">
+                <div class="head">
+                    <h3>{{ item.name }}</h3>
+                </div>
+                <div class="body">
+                    <GoodsItem v-for="good in item.goods" :key="good.id" :goods="good" />
+                </div>
             </div>
         </div>
     </div>
