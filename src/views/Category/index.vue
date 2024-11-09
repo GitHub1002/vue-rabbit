@@ -45,7 +45,8 @@
                     <h3>{{ item.name }}</h3>
                 </div>
                 <div class="body">
-                    <GoodsItem v-for="good in item.goods" :key="good.id" :goods="good" />
+                    <!-- <GoodsItem v-for="good in item.goods" :key="good.id" :goods="good" /> -->
+                    <GoodsItem :goods="item.goods" />
                 </div>
             </div>
         </div>

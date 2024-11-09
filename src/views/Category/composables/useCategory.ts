@@ -11,7 +11,6 @@ export function useCategory() {
     const getCategory = async (id = route.params.id) => {
         const res = await getCategoryAPI(id);
         categoryData.value = res.data.result;
-        console.log(categoryData.value)
     }
     onMounted(() => getCategory())
     // 路由参数变化时，可以把分类数据接口重新发送
