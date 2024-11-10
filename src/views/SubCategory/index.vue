@@ -3,6 +3,7 @@
     import { getCategoryFilterAPI, getSubCategoryAPI } from '@/apis/category';
     import GoodItem from '@/views/Home/components/GoodsItem.vue';
     import { useRoute } from 'vue-router';
+import { request } from 'node_modules/axios/index.cjs';
 
     // 面包屑导航数据
     const categoryData = ref([]);
@@ -26,9 +27,15 @@
     const getSubCategory = async () => {
         const res = await getSubCategoryAPI(requestData.value)
         goodList.value = res.data.result.items
-        console.log(goodList.value)
     }
     onMounted(() => getSubCategory())
+
+    // tab切换回调
+    const tabChange = () => {
+        // 重置page为1，切换tab时候重新从第一页请求数据
+        requestData.value.page =  1
+        getSubCategory()
+    }
 
 </script>
 
@@ -43,7 +50,8 @@
             </el-breadcrumb>
         </div>
         <div class="sub-container">
-            <el-tabs>
+            <!-- v-model绑定sortField字段，当tab切换时，sortField字段会自动成对应的name值，即publishTime | orderNum | evaluateNum  -->
+            <el-tabs v-model="requestData.sortField" @tab-change="tabChange">
                 <el-tab-pane label="最新商品" name="publishTime"></el-tab-pane>
                 <el-tab-pane label="最高人气" name="orderNum"></el-tab-pane>
                 <el-tab-pane label="评论最多" name="evaluateNum"></el-tab-pane>
