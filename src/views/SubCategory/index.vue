@@ -3,7 +3,6 @@
     import { getCategoryFilterAPI, getSubCategoryAPI } from '@/apis/category';
     import GoodItem from '@/views/Home/components/GoodsItem.vue';
     import { useRoute } from 'vue-router';
-import { request } from 'node_modules/axios/index.cjs';
 
     // 面包屑导航数据
     const categoryData = ref([]);
@@ -37,6 +36,21 @@ import { request } from 'node_modules/axios/index.cjs';
         getSubCategory()
     }
 
+    // 加载更多数据
+    const disabled = ref(false)
+    const load = async () => {
+        console.log(requestData.value.page)
+        // 获取下一页数据
+        requestData.value.page += 1
+        const res = await getSubCategoryAPI(requestData.value)
+        // 合并数据
+        goodList.value = [...goodList.value, ...res.data.result.items]
+        // 判断是否还有下一页数据
+        // res.data.result.items.length == 0 ? disabled.value = true : disabled.value = false
+        if (res.data.result.items.length === 0) {
+            disabled.value = true
+        }
+    }
 </script>
 
 <template>
@@ -56,7 +70,7 @@ import { request } from 'node_modules/axios/index.cjs';
                 <el-tab-pane label="最高人气" name="orderNum"></el-tab-pane>
                 <el-tab-pane label="评论最多" name="evaluateNum"></el-tab-pane>
             </el-tabs>
-            <div class="body">
+            <div class="body"  v-infinite-scroll="load" :infinite-scroll-disabled="disabled">
                 <!-- 商品列表-->
                 <!-- <GoodItem v-for="item in goodList" :key="item.id" :goods="item" /> -->
                 <GoodItem :goods="goodList" />

@@ -38,10 +38,9 @@ const router = createRouter({
   ],
   // 路由滚动行为定制
   scrollBehavior() {
-    // return {
-    //     top: 0
-    // }
-    window.scrollTo(0, 0)
+    return {
+        top: 0
+    }
   }
 })
 
