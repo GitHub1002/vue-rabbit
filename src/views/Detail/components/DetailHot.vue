@@ -1,23 +1,38 @@
 <script setup lang="ts">
     import { getHotGoodsAPI } from '@/apis/detail'
-    import { ref, onMounted } from 'vue';
+    import { ref, onMounted, computed } from 'vue';
     import { useRoute } from 'vue-router';
     
+    const props = defineProps({
+        hotType: {
+            type: Number
+        }
+    })
+
+    // 得到热销数据
     const hostList = ref([]);
     const route = useRoute();
     const getHotGoods = async () => {
-        const result = await getHotGoodsAPI({id:route.params.id, type: 1, limit: 3});
+        const result = await getHotGoodsAPI({id:route.params.id, type: props.hotType});
         console.log(result);
         hostList.value = result.data.result;
     }
+    // 根据type值，设置标题为每周热销还是每日热销
+    const TYPENUME = {
+        1: '每日热销',
+        2: '每周热销'
+    }
+    const title = computed(() => TYPENUME[props.hotType]);
 
+    // 页面加载完成后，请求热销数据
     onMounted(() => getHotGoods())
+
 </script>
 
 
 <template>
     <div class="goods-hot">
-        <h3>每周热卖</h3>
+        <h3>{{title}}</h3>
         <!-- 商品区块 -->
         <RouterLink to="/" class="goods-item" v-for="item in hostList" :key="item.id">
             <img :src="item.picture" alt="" />
