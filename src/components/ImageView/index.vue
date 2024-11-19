@@ -1,5 +1,6 @@
 <script setup lang="ts">
-    import { ref } from 'vue'
+    import { ref, watch } from 'vue'
+    import {  useMouseInElement } from '@vueuse/core';
 
     // 图片索引
     const imageIndex = ref(0)
@@ -15,17 +16,54 @@
         "https://yanxuan-item.nosdn.127.net/f93243224dc37674dfca5874fe089c60.jpg",
         "https://yanxuan-item.nosdn.127.net/f881cfe7de9a576aaeea6ee0d1d24823.jpg"
     ]
+
+    // 获取鼠标相对位置
+    const target = ref(null)
+    const {elementX, elementY, isOutside} = useMouseInElement(target)
+    // 蒙层移动
+    const left = ref(0)
+    const top = ref(0)
+    watch([elementX, elementY, isOutside], () => {
+        // 鼠标移出图片列表时，蒙层隐藏
+        if (isOutside.value) {
+            return
+        } 
+        // 鼠标进入图片列表时，蒙层显示
+        else {
+            // 计算left的值
+            if(elementX.value > 100 && elementX.value < 300){
+                left.value = elementX.value - 100
+            }
+            else if(elementX.value > 300){
+                left.value = 200
+            }
+            else{
+                left.value = 0  
+            }
+            // 计算top的值
+            if(elementY.value > 100 && elementY.value < 300){
+                top.value = elementY.value - 100
+            }
+            else if(elementY.value > 300){
+                top.value = 200
+            }
+            else{
+                top.value = 0
+            }
+        }
+    })
 </script>
 
 
 <template>
+    {{  elementX}}, {{ elementY }} , {{ isOutside }} 
+    {{  left}}, {{ top }} 
     <div class="goods-image">
-
         <!-- 左侧大图-->
         <div class="middle" ref="target">
             <img :src="imageList[imageIndex]" alt="" />
             <!-- 蒙层小滑块 -->
-            <div class="layer"></div>
+            <div class="layer" v-show="!isOutside" :style="{left:`${left}px`, top:`${top}px`}"></div>
         </div>
         <!-- 小图列表 -->
         <ul class="small">
