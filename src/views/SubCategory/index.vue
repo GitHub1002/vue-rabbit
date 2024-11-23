@@ -39,7 +39,6 @@
     // 加载更多数据
     const disabled = ref(false)
     const load = async () => {
-        console.log(requestData.value.page)
         // 获取下一页数据
         requestData.value.page += 1
         const res = await getSubCategoryAPI(requestData.value)

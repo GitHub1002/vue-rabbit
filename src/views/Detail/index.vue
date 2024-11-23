@@ -4,6 +4,7 @@
     import { getDetailAPI } from '@/apis/detail'
     import  DetailHot  from '@/views/Detail/components/DetailHot.vue'
     import ImageView from '@/components/ImageView/index.vue'
+    import StxSku from '@/components/XtxSku/index.vue'
 
     // 获取详情页参数
     const route = useRoute()
@@ -13,6 +14,11 @@
         goods.value = res.data.result
     }
     onMounted(() => getDetailData())
+
+    // sku组件被操作时
+    const changeSku = (sku) => {
+        console.log(sku)
+    }
 </script>
 
 <template>
@@ -40,7 +46,7 @@
                     <div class="goods-info">
                         <div class="media">
                             <!-- 图片预览区 -->
-                            <ImageView />
+                            <ImageView :image-list="goods.mainPictures"/>
                             <!-- 统计数量 -->
                             <ul class="goods-sales">
                                 <li>
@@ -89,7 +95,7 @@
                                 </dl>
                             </div>
                             <!-- sku组件 -->
-
+                            <StxSku :goods="goods" @change="changeSku"/>
                             <!-- 数据组件 -->
                             
                             <!-- 按钮组件 -->
