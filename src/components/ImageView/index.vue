@@ -23,13 +23,16 @@
     // 蒙层移动
     const left = ref(0)
     const top = ref(0)
+    // 放大镜图的移动
+    const positionX = ref(0)
+    const positionY = ref(0)
     watch([elementX, elementY, isOutside], () => {
         // 鼠标移出图片列表时，蒙层隐藏
         if (isOutside.value) {
             return
         } 
-        // 鼠标进入图片列表时，蒙层显示
         else {
+            // 鼠标进入图片列表时，蒙层显示
             // 计算left的值
             if(elementX.value > 100 && elementX.value < 300){
                 left.value = elementX.value - 100
@@ -50,6 +53,9 @@
             else{
                 top.value = 0
             }
+            // 计算放大镜图的移动
+            positionX.value = -left.value * 2
+            positionY.value = -top.value * 2
         }
     })
 </script>
@@ -72,6 +78,13 @@
             </li>
         </ul>
         <!-- 放大镜大图 -->
+        <div class="large" :style="[
+            {
+                backgroundImage: `url(${imageList[imageIndex]})`,
+                backgroundPositionX: `${positionX}px`,
+                backgroundPositionY: `${positionY}px`,
+            },
+        ]" v-show="!isOutside"></div>
     </div>
 </template>
 
