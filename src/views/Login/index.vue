@@ -48,7 +48,7 @@
                 const { account, password } = form.value;
                 // TODO: 登录逻辑
                 const res = await loginAPI({account, password});
-                console.log(res.data)
+                console.log(res)
                 if (res.data.code === "1"){
                     ElMessage.success('登录成功')
                     // 登录成功后跳转到首页

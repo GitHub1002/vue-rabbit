@@ -10,7 +10,7 @@ export function useCategory() {
     // 面包屑数据
     const getCategory = async (id = route.params.id) => {
         const res = await getCategoryAPI(id);
-        categoryData.value = res.data.result;
+        categoryData.value = res.result;
     }
     onMounted(() => getCategory())
     // 路由参数变化时，可以把分类数据接口重新发送

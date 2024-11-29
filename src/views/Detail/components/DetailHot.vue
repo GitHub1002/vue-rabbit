@@ -14,7 +14,7 @@
     const route = useRoute();
     const getHotGoods = async () => {
         const result = await getHotGoodsAPI({id:route.params.id, type: props.hotType});
-        hostList.value = result.data.result;
+        hostList.value = result.result;
     }
     // 根据type值，设置标题为每周热销还是每日热销
     const TYPENUME = {

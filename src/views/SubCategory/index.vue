@@ -9,7 +9,7 @@
     const route = useRoute();
     const getCategoryData = async (id = route.params.id) => {
         const res = await getCategoryFilterAPI(id);
-        categoryData.value = res.data.result;
+        categoryData.value = res.result;
     }
     onMounted(() => {
         getCategoryData();
@@ -25,7 +25,7 @@
     })
     const getSubCategory = async () => {
         const res = await getSubCategoryAPI(requestData.value)
-        goodList.value = res.data.result.items
+        goodList.value = res.result.items
     }
     onMounted(() => getSubCategory())
 
@@ -43,10 +43,10 @@
         requestData.value.page += 1
         const res = await getSubCategoryAPI(requestData.value)
         // 合并数据
-        goodList.value = [...goodList.value, ...res.data.result.items]
+        goodList.value = [...goodList.value, ...res.result.items]
         // 判断是否还有下一页数据
         // res.data.result.items.length == 0 ? disabled.value = true : disabled.value = false
-        if (res.data.result.items.length === 0) {
+        if (res.result.items.length === 0) {
             disabled.value = true
         }
     }

@@ -6,7 +6,7 @@
     const newList = ref([]);
     const getHomeNewList = async () => {
         const res = await findNewAPI();
-        newList.value = res.data.result;
+        newList.value = res.result;
     };
 
     onMounted(() => getHomeNewList())

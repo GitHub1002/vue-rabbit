@@ -9,7 +9,7 @@
     const goods = ref({})
     const getDetailData = async () => {
         const res = await getDetailAPI(route.params.id)
-        goods.value = res.data.result
+        goods.value = res.result
     }
     onMounted(() => getDetailData())
 
