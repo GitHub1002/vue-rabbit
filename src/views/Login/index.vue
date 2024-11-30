@@ -1,11 +1,12 @@
 <script setup lang="ts">
     import { ref } from 'vue'
-    import { loginAPI } from '@/apis/user';
+    import { userStore } from '@/stores/userStore';
     import { useRouter } from 'vue-router';
     import 'element-plus/theme-chalk/el-message.css'
     import { ElMessage } from 'element-plus';
 
     const router = useRouter();
+    const useUserStore = userStore();
 
     // 定义表单对象
     const form = ref({
@@ -47,14 +48,11 @@
             if (valid) {
                 const { account, password } = form.value;
                 // TODO: 登录逻辑
-                const res = await loginAPI({account, password});
-                console.log(res)
-                if (res.data.code === "1"){
-                    ElMessage.success('登录成功')
-                    // 登录成功后跳转到首页
-                    router.replace({path: '/'})
-                    console.log('登录失败')
-                }
+                // const res = await loginAPI({account, password});
+                useUserStore.getUserInfo({account, password});
+                ElMessage.success('登录成功')
+                // 登录成功后跳转到首页
+                router.replace({path: '/'})
             }
         })
     }

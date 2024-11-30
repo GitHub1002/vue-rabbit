@@ -9,13 +9,10 @@ const httpInstance = axios.create({
 });
 
 // 添加请求拦截器
-httpInstance.interceptors.request.use(function (config) {
+httpInstance.interceptors.request.use(config => {
     // 在发送请求之前做些什么
     return config;
-}, function (error) {
-    // 对请求错误做些什么
-    return Promise.reject(error);
-});
+}, e => Promise.reject(e));
 
 // 添加响应拦截器
 httpInstance.interceptors.response.use(res => res.data, e => {
