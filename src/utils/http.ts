@@ -1,6 +1,7 @@
 import axios from 'axios';
 import 'element-plus/theme-chalk/el-message.css'
 import { ElMessage } from 'element-plus';
+import { userStore } from '@/stores/userStore';
 
 const httpInstance = axios.create({
     // 后端由黑马提供
@@ -11,6 +12,14 @@ const httpInstance = axios.create({
 // 添加请求拦截器
 httpInstance.interceptors.request.use(config => {
     // 在发送请求之前做些什么
+    // 获取token
+    const useUserStore = userStore();
+    const token = useUserStore.userInfo.token;
+    // 如果有token，则在请求头中添加token
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+
     return config;
 }, e => Promise.reject(e));
 
