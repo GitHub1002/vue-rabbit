@@ -32,7 +32,7 @@ httpInstance.interceptors.response.use(res => res.data, e => {
     // 统一错误提示
     ElMessage({
         type: 'warning',
-        message: e.response.data.message
+        message: e.response.message
     })
     // 401 token失效处理
     // 1. 清除本地用户数据
