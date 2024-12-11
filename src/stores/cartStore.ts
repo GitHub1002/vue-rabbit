@@ -1,24 +1,48 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
+import { userStore } from './userStore'
+import { insertCartAPI, findNewCartListAPI, delCartAPI } from "@/apis/cart";
 
 export const useCartStore = defineStore("cart", () => {
+    const useUserStore = userStore()
+    const isLogin = computed(() => useUserStore.userInfo.token)
     const cartList = ref([])
 
+    // 获取最新购物车列表action
+    const updateNewList = async () => {
+        const res = await findNewCartListAPI()
+        cartList.value = res.result
+    }
     // 添加购物车商品
-    const addToCart = (goods) => {
-        const item = cartList.value.find((cartItem) => cartItem.skuId === goods.skuId)
-        if (item){
-            item.count += 1
+    const addToCart = async (goods) => {
+        const { skuId, count } = goods
+        // 判断用户是否登录
+        if (isLogin.value){
+            await insertCartAPI({skuId, count})
+            updateNewList()
         }
-        else {
-            cartList.value.push(goods)
+        else{
+            const item = cartList.value.find((cartItem) => cartItem.skuId === goods.skuId)
+            if (item){
+                item.count += 1
+            }
+            else {
+                cartList.value.push(goods)
+            }
         }
+        
     }
 
     // 删除购物车商品
     const delCart = (skuId) => {
-        const idx = cartList.value.findIndex((cartItem) => cartItem.skuId === skuId)
-        cartList.value.splice(idx, 1)
+        if (isLogin.value){
+            delCartAPI([skuId])
+            updateNewList()
+        }
+        else {
+            const idx = cartList.value.findIndex((cartItem) => cartItem.skuId === skuId)
+            cartList.value.splice(idx, 1)
+        }
     }
      // 单选功能
     const singleCheck = (skuId, selected) => {
@@ -58,7 +82,8 @@ export const useCartStore = defineStore("cart", () => {
         allCheck,
         selectedCount,
         selectedPrice,
-        isAll
+        isAll,
+        updateNewList
     }
 },{
     persist: true,
